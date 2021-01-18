@@ -178,3 +178,30 @@
                             (else (aux set1)))))])    
         (cond ((null? sets) '())
               (else (A sets)))))))
+
+(define rember  
+  (lambda (a lat)
+    (letrec ([R (lambda (lat)
+                  (cond
+                    ((null? lat) '())
+                    ((eq? a (car lat)) (cdr lat))
+                    (else (cons (car lat) (R (cdr lat))))))])
+      (R lat))))
+
+(define rember-beyond-first
+  (lambda (a lat)
+    (letrec ([R (lambda (lat)
+                  (cond
+                    ((or (null? lat) (eq? a (car lat))) '())                    
+                    (else (cons (car lat) (R (cdr lat))))))])
+      (R lat))))
+
+(define rember-upto-last
+  (lambda (a lat)
+    (let/cc skip
+      (letrec ([R (lambda (lat)
+                    (cond
+                     ((null? lat) '())
+                     ((eq? a (car lat)) (skip (R (cdr lat))))
+                     (else (cons (car lat) (R (cdr lat))))))])
+        (R lat)))))
