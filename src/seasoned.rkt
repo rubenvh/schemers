@@ -205,3 +205,13 @@
                      ((eq? a (car lat)) (skip (R (cdr lat))))
                      (else (cons (car lat) (R (cdr lat))))))])
         (R lat)))))
+
+(define leftmost
+  (lambda (l)
+    (cond
+      ((null? l) '())
+      ((atom? (car l)) (car l))
+      (else (let ([x (leftmost (car l))])
+              (cond
+                ((atom? x) x)
+                (else (leftmost (cdr l)))))))))
