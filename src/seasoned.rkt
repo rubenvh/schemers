@@ -215,3 +215,33 @@
               (cond
                 ((atom? x) x)
                 (else (leftmost (cdr l)))))))))
+
+(define rember1*
+  (lambda (a l)
+    (letrec ([R (lambda (l) 
+               (cond
+                 ((null? l) '())
+                 ((atom? (car l))
+                  (cond
+                    ((eq? a (car l)) (cdr l))
+                    (else (cons (car l) (R (cdr l))))))
+                 (else
+                  (let ([av (R (car l))])
+                    (cond
+                      ((eqlist? av (car l))
+                       (cons (car l) (R (cdr l))))
+                      (else (cons av (cdr l))))))))])
+      (R l))))
+
+(define depth*
+   (lambda (l)
+    (cond
+      ((null? l) 1)
+      ((atom? (car l))
+       (depth* (cdr l)))
+      (else
+       (let ([ld (+ 1 (depth* (car l)))]
+             [rd (depth* (cdr l))])
+         (cond
+           ((> ld rd) ld)
+           (else rd)))))))
